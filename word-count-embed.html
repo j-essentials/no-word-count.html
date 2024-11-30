@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notion Word Count</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f6f3;
+            color: #37352f;
+        }
+        #word-count-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e9e6e2;
+        }
+        #word-count {
+            font-size: 48px;
+            font-weight: bold;
+            color: #0070f3;
+        }
+        #instructions {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div id="word-count-container">
+        <div id="word-count">0</div>
+        <div id="instructions">Word Count</div>
+    </div>
+
+    <script>
+        function updateWordCount() {
+            // Request word count from parent page
+            window.parent.postMessage({
+                type: 'REQUEST_WORD_COUNT'
+            }, '*');
+        }
+
+        // Listen for word count from parent
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'WORD_COUNT_RESPONSE') {
+                document.getElementById('word-count').textContent = event.data.wordCount;
+            }
+        });
+
+        // Initial update and setup interval
+        updateWordCount();
+        setInterval(updateWordCount, 5000);
+    </script>
+</body>
+</html>
